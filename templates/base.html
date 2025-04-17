@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}SimpleSEOTags - AI YouTube Tag Generator{% endblock %}</title>
+    <meta name="title" content="SimpleSEOTags - AI YouTube Tag Generator">
+    <meta name="description" content="Generate optimized YouTube tags instantly with our free AI-powered tool. Boost your video visibility and reach more viewers with smart tag suggestions.">
+    <meta name="keywords" content="youtube tags, tag generator, youtube seo, video optimization, youtube keywords, video tags, youtube ranking, video analytics, youtube insights, video SEO, video marketing, youtube optimization, youtube tags generator, youtube tag suggestions, youtube tag ideas, youtube tag trends, youtube tag suggestions, youtube tag ideas, youtube tag trends, youtube tag suggestions, youtube tag ideas, youtube tag trends">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:title" content="SimpleSEOTags - AI YouTube Tag Generator">
+    <meta property="og:description" content="Generate optimized YouTube tags instantly with our free AI-powered tool. Boost your video visibility and reach more viewers.">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.png', _external=True) }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.url }}">
+    <meta property="twitter:title" content="SimpleSEOTags - AI YouTube Tag Generator">
+    <meta property="twitter:description" content="Free AI-powered YouTube tag generator. Get better video visibility with optimized tags.">
+    <meta property="twitter:image" content="{{ url_for('static', filename='images/twitter-card.png', _external=True) }}">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="author" content="SimpleSEOTags">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SimpleSEOTags",
+        "applicationCategory": "SEO Tool",
+        "description": "AI-powered YouTube tag generator for optimizing video visibility and reach",
+        "operatingSystem": "Web Browser",
+        "url": "{{ request.url_root }}",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "features": [
+            "AI-powered tag generation",
+            "YouTube optimization",
+            "Video visibility & analytics for improvement",
+            "Instant tag suggestions",
+            "Free to use"
+        ]
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='favicon/safari-pinned-tab.svg') }}" color="#ff0000">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #FF0000;
+            --primary-light: #ff4d4d;
+            --text-color: #1a1a1a;
+            --gradient: linear-gradient(135deg, #FF0000, #FF4D4D);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding-top: 1rem;
+            padding-bottom: 60px;
+            margin-top: 60px;
+        }
+
+        .navbar {
+            height: 60px;
+            padding: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            line-height: 60px;
+            padding: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-simple {
+            color: var(--text-color);
+        }
+
+        .brand-seo {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-tags {
+            color: var(--primary-color);
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 0;
+            margin-top: auto;
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            height: 100%;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            line-height: 50px;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-copyright {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                height: auto;
+                min-height: 50px;
+                padding: 0.5rem 0;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.25rem;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+
+            .footer-link,
+            .footer-copyright {
+                line-height: normal;
+            }
+        }
+
+        /* Header Styles */
+        .main-header {
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 1.6em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text i {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        .logo-black {
+            color: var(--text-color);
+        }
+
+        .logo-red {
+            color: var(--primary-color);
+        }
+
+        .youtube-icon-wrapper {
+            margin-right: 12px;
+            position: relative;
+        }
+
+        .youtube-icon {
+            background: var(--primary-color);
+            color: white;
+            width: 42px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .youtube-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .youtube-icon i {
+            font-size: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .play-button {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 6px 0 6px 10px;
+            border-color: transparent transparent transparent white;
+            left: 55%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover .youtube-icon {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .logo:hover .youtube-icon i {
+            opacity: 0;
+        }
+
+        .logo:hover .play-button {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .youtube-icon {
+                width: 38px;
+                height: 32px;
+            }
+
+            .youtube-icon i {
+                font-size: 18px;
+            }
+
+            .play-button {
+                border-width: 5px 0 5px 8px;
+            }
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 20px;
+            }
+            
+            .header-nav {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Add to existing styles */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 20px;
+                position: relative;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                z-index: 100;
+            }
+
+            .header-nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                display: none;
+                animation: slideDown 0.3s ease;
+            }
+
+            .header-nav.active {
+                display: flex;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+                width: 100%;
+                text-align: center;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-link:hover {
+                background: #f8f9fa;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add to existing styles */
+        .nav-link[target="_blank"]:after {
+            content: "↗";
+            margin-left: 4px;
+            font-size: 0.8em;
+        }
+
+        .footer-link[target="_blank"]:after {
+            content: "↗";
+            margin-left: 2px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .nav-link[target="_blank"] {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+            }
+        }
+    </style>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo">
+                <span class="logo-text">
+                    <div class="youtube-icon-wrapper">
+                        <div class="youtube-icon">
+                            <i class="fab fa-youtube"></i>
+                            <div class="play-button"></div>
+                        </div>
+                    </div>
+                    <span class="logo-black">Simple</span><span class="logo-red">SEOTags</span>
+                </span>
+            </a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="header-nav" id="header-nav">
+                <a href="/generate" class="nav-link">Generate Tags</a>
+                <a href="/analyze" class="nav-link">Analyze Video</a>
+                <a href="https://blog.simpleseotags.io" class="nav-link" target="_blank">Blog</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="/about" class="footer-link">About</a>
+                    <a href="/privacy" class="footer-link">Privacy Policy</a>
+                    <a href="/terms" class="footer-link">Terms of Service</a>
+                    <a href="https://blog.simpleseotags.io" class="footer-link" target="_blank">Blog</a>
+                </div>
+                <div class="footer-copyright">
+                    © 2024 SimpleSEOTags. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function toggleMobileMenu() {
+        const nav = document.getElementById('header-nav');
+        const menuBtn = document.querySelector('.mobile-menu-btn i');
+        
+        nav.classList.toggle('active');
+        
+        // Toggle menu icon
+        if (nav.classList.contains('active')) {
+            menuBtn.classList.remove('fa-bars');
+            menuBtn.classList.add('fa-times');
+        } else {
+            menuBtn.classList.remove('fa-times');
+            menuBtn.classList.add('fa-bars');
+        }
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const nav = document.getElementById('header-nav');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        
+        if (nav.classList.contains('active') && 
+            !nav.contains(event.target) && 
+            !menuBtn.contains(event.target)) {
+            nav.classList.remove('active');
+            menuBtn.querySelector('i').classList.remove('fa-times');
+            menuBtn.querySelector('i').classList.add('fa-bars');
+        }
+    });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

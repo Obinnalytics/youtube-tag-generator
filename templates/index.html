@@ -1,0 +1,619 @@
+{% extends "base.html" %}
+
+{% block title %}YouTube Tag Generator - Free AI-Powered Tags | SimpleSEOTags{% endblock %}
+
+{% block head %}
+    <!-- Meta Tags -->
+    <meta name="description" content="Generate optimized YouTube tags instantly with our free AI-powered tag generator. Boost your video visibility and reach more viewers with smart tag suggestions.">
+    <meta name="keywords" content="youtube tag generator, youtube tags, video seo, youtube optimization, free tag generator">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:title" content="YouTube Tag Generator - Free AI-Powered Tags">
+    <meta property="og:description" content="Generate optimized YouTube tags instantly with our free AI-powered tag generator. Boost your video visibility and reach more viewers.">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.png', _external=True) }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.url }}">
+    <meta property="twitter:title" content="YouTube Tag Generator - Free AI-Powered Tags">
+    <meta property="twitter:description" content="Generate optimized YouTube tags instantly with our free AI-powered tag generator. Boost your video visibility.">
+    <meta property="twitter:image" content="{{ url_for('static', filename='images/twitter-card.png', _external=True) }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.url_root }}generate">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SimpleSEOTags YouTube Tag Generator",
+        "description": "AI-powered YouTube tag generator for optimizing video visibility",
+        "url": "{{ request.url }}",
+        "applicationCategory": "SEO Tool",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "SimpleSEOTags",
+            "url": "{{ request.url_root }}"
+        }
+    }
+    </script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --bs-primary: #FF0000;
+        --bs-primary-rgb: 255, 0, 0;
+        --gradient: linear-gradient(135deg, #FF0000, #FF4D4D);
+    }
+
+    /* Core styles */
+    .page-wrapper {
+        min-height: 100vh;
+        background-color: #f8f9fa;
+        padding-top: 80px;
+    }
+
+    /* Hero section */
+    .hero-section {
+        padding: 3rem 0;
+        background: white;
+        border-bottom: 1px solid rgba(0,0,0,.05);
+        margin-bottom: 2rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #6c757d;
+        max-width: 600px;
+    }
+
+    /* Search section */
+    .search-card {
+        background: white;
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,.05);
+    }
+
+    /* Modern Search Container */
+    .search-container {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Modern Input Field */
+    .search-input {
+        flex: 1;
+        height: 54px;
+        padding: 0 1.5rem;
+        font-size: 1rem;
+        color: #2d3436;
+        background: white;
+        border: 2px solid #eee;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.1);
+    }
+
+    .search-input::placeholder {
+        color: #a0a0a0;
+        font-size: 0.95rem;
+    }
+
+    /* Modern Generate Button */
+    .generate-btn {
+        padding: 0 2rem;
+        height: 60px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        background: #2d3436;  /* Dark gray with slight blue tint */
+        color: white;
+        border: none;
+        border-radius: 0 12px 12px 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .generate-btn:hover {
+        background: #34495e;  /* Slightly lighter with blue tint */
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(45, 52, 54, 0.2);
+    }
+
+    .generate-btn:active {
+        transform: translateY(0);
+        background: #2c3e50;  /* Darker shade when clicked */
+    }
+
+    .generate-btn:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .generate-btn i {
+        font-size: 1.2rem;
+        color: #dfe6e9;  /* Slightly muted white for icon */
+    }
+
+    /* Results section */
+    .results-section {
+        padding: 2rem 0;
+    }
+
+    #tags {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .tag {
+        background: #f8f9fa;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .tag:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+
+    /* Loading state */
+    #loading {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    #loading p {
+        margin-top: 1rem;
+        color: #666;
+    }
+
+    /* Copy All Button */
+    .copy-all-btn {
+        background: #2d3436;  /* Same as generate button */
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 2rem auto;
+        transition: all 0.3s ease;
+    }
+
+    .copy-all-btn:hover {
+        background: #34495e;  /* Same hover state as generate button */
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(45, 52, 54, 0.2);
+    }
+
+    .copy-all-btn:active {
+        transform: translateY(0);
+        background: #2c3e50;  /* Same active state as generate button */
+    }
+
+    .copy-all-btn i {
+        font-size: 1.1rem;
+        color: #dfe6e9;  /* Slightly muted white for icon */
+    }
+
+    #copy-all {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    /* Toast notification */
+    .toast {
+        background: var(--gradient) !important;
+        border-radius: 0.75rem;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 2rem 0;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .search-container {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .search-input,
+        .generate-btn {
+            height: 48px;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+
+        .generate-btn {
+            justify-content: center;
+        }
+
+        .tags-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            padding: 0.75rem;
+        }
+
+        .tag {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            border-radius: 0.5rem;
+        }
+    }
+
+    /* Input Field and Button Styles */
+    .input-section {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .input-group {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    #query {
+        height: 60px;
+        padding: 0 1.5rem;
+        font-size: 1.1rem;
+        border: 2px solid #eee;
+        border-right: none;
+        border-radius: 12px 0 0 12px;
+        transition: all 0.3s ease;
+    }
+
+    #query:focus {
+        outline: none;
+        border-color: #ddd;
+        box-shadow: none;
+    }
+
+    #query::placeholder {
+        color: #aaa;
+    }
+
+    /* Loading State */
+    .generate-btn.loading {
+        background: #636e72;  /* Muted gray when loading */
+        pointer-events: none;
+    }
+
+    .generate-btn.loading i {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+        .input-section {
+            padding: 1.5rem 1rem;
+        }
+
+        #query {
+            height: 50px;
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+
+        .generate-btn {
+            height: 50px;
+            font-size: 1rem;
+            padding: 0 1.5rem;
+        }
+    }
+
+    .main-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 1rem;
+        margin-top: 3.5rem;
+    }
+
+    .how-it-works {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .how-it-works h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    .step {
+        position: relative;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: #2d3436;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin: 0 auto 1rem;
+    }
+
+    .step h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .step p {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .steps {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .main-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Main Heading (H1) -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-8 text-center">
+            <h1 class="main-title">YouTube Tag Generator</h1>
+            <p class="lead">Generate optimized tags for your videos in seconds using AI technology</p>
+        </div>
+    </div>
+
+    <!-- Generator Section -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="input-section">
+                <form id="generate-form" class="mb-4" onsubmit="handleSubmit(event)">
+                    <div class="input-group">
+                        <input type="text" 
+                               id="query" 
+                               class="form-control" 
+                               placeholder="Enter your video title or description..." 
+                               required>
+                        <button type="submit" class="generate-btn">
+                            <i class="fas fa-magic"></i>
+                            Generate Tags
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="results-section">
+                <div id="loading" class="d-none">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Generating tags...</p>
+                </div>
+                
+                <div id="tags" class="mb-4"></div>
+                
+                <div id="copy-all" class="d-none">
+                    <button class="copy-all-btn" onclick="copyAllTags()">
+                        <i class="fas fa-copy me-2"></i>Copy All Tags
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-12 col-md-8">
+            <section class="how-it-works">
+                <h2>How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Enter Your Content</h3>
+                        <p>Input your video title or description</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>AI Analysis</h3>
+                        <p>Our AI analyzes your content for relevant keywords</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Get Tags</h3>
+                        <p>Receive optimized tags for your video</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="copyFeedback" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="fas fa-check-circle me-2"></i>
+                Copied to clipboard
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function handleSubmit(event) {
+        event.preventDefault();
+        generateTags();
+    }
+
+    function generateTags() {
+        const queryInput = document.getElementById('query');
+        const query = queryInput.value.trim();
+        const loading = document.getElementById('loading');
+        const tagsDiv = document.getElementById('tags');
+        const copyAllDiv = document.getElementById('copy-all');
+        const generateBtn = document.querySelector('.generate-btn');
+
+        if (!query) {
+            tagsDiv.innerHTML = '<div class="alert alert-warning">Please enter a video title or description</div>';
+            return;
+        }
+
+        // Show loading state
+        loading.classList.remove('d-none');
+        tagsDiv.innerHTML = '';
+        copyAllDiv.classList.add('d-none');
+        generateBtn.classList.add('loading');
+        generateBtn.disabled = true;
+
+        // Make API request
+        fetch('/generate-tags', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `query=${encodeURIComponent(query)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            loading.classList.add('d-none');
+            generateBtn.classList.remove('loading');
+            generateBtn.disabled = false;
+            
+            if (data.error) {
+                tagsDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        ${data.error}
+                    </div>`;
+                return;
+            }
+
+            // Display tags
+            if (data.tags && data.tags.length > 0) {
+                const tagElements = data.tags.map(tag => `
+                    <div class="tag" onclick="copyTag('${tag}')">
+                        <span>${tag}</span>
+                        <i class="fas fa-copy ms-2 opacity-50"></i>
+                    </div>
+                `).join('');
+
+                tagsDiv.innerHTML = tagElements;
+                copyAllDiv.classList.remove('d-none');
+            } else {
+                tagsDiv.innerHTML = '<div class="alert alert-info">No tags were generated. Please try a different query.</div>';
+            }
+        })
+        .catch(error => {
+            loading.classList.add('d-none');
+            generateBtn.classList.remove('loading');
+            generateBtn.disabled = false;
+            tagsDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    An error occurred. Please try again.
+                </div>`;
+            console.error('Error:', error);
+        });
+    }
+
+    function copyTag(tag) {
+        navigator.clipboard.writeText(tag).then(() => {
+            showCopyFeedback();
+        });
+    }
+
+    function copyAllTags() {
+        const tags = Array.from(document.querySelectorAll('.tag'))
+            .map(tag => tag.querySelector('span').textContent.trim());
+        navigator.clipboard.writeText(tags.join(', ')).then(() => {
+            showCopyFeedback();
+        });
+    }
+
+    function showCopyFeedback() {
+        const toast = new bootstrap.Toast(document.getElementById('copyFeedback'));
+        toast.show();
+    }
+</script>
+{% endblock %}

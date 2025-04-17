@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service - SimpleSEOTags{% endblock %}
+
+{% block styles %}
+<style>
+    .terms-container {
+        padding-top: 80px;
+        background: #fff;
+    }
+
+    /* Hero Section */
+    .terms-hero {
+        background: linear-gradient(to right, #fff, #f8f9fa);
+        padding: 4rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .terms-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--black);
+        margin-bottom: 1rem;
+    }
+
+    .last-updated {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Content Section */
+    .terms-content {
+        padding: 4rem 0;
+    }
+
+    .section-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .section-card:hover {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--black);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .section-title i {
+        color: var(--red);
+    }
+
+    .terms-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .terms-list li {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .terms-list li::before {
+        content: "•";
+        color: var(--red);
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .highlight-box {
+        background: #f8f9fa;
+        border-left: 4px solid var(--red);
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .highlight-box p:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .terms-hero {
+            padding: 3rem 0;
+        }
+
+        .terms-title {
+            font-size: 2rem;
+        }
+
+        .section-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="terms-container">
+    <!-- Hero Section -->
+    <section class="terms-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="terms-title">Terms of Service</h1>
+                    <p class="last-updated">Last Updated: March 15, 2024</p>
+                    <p class="lead">Please read these terms carefully before using our service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="terms-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Agreement -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-handshake"></i>
+                            Agreement to Terms
+                        </h2>
+                        <p>By accessing or using SimpleSEOTags, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access our service.</p>
+                        
+                        <div class="highlight-box">
+                            <p><strong>Important:</strong> Our service is intended for users who are at least 13 years of age. By using SimpleSEOTags, you represent that you meet this requirement.</p>
+                        </div>
+                    </div>
+
+                    <!-- Service Usage -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-tools"></i>
+                            Use of Service
+                        </h2>
+                        <p>Our service is designed to help content creators optimize their YouTube videos. You agree to:</p>
+                        <ul class="terms-list">
+                            <li>Use the service for its intended purpose</li>
+                            <li>Not attempt to bypass any service limitations</li>
+                            <li>Not use automated systems to access the service</li>
+                            <li>Respect fair usage policies and rate limits</li>
+                        </ul>
+                    </div>
+
+                    <!-- User Responsibilities -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-user-check"></i>
+                            User Responsibilities
+                        </h2>
+                        <p>As a user of SimpleSEOTags, you are responsible for:</p>
+                        <ul class="terms-list">
+                            <li>Maintaining the confidentiality of your account</li>
+                            <li>All activities that occur under your account</li>
+                            <li>Ensuring your content complies with YouTube's policies</li>
+                            <li>Using generated tags appropriately and ethically</li>
+                        </ul>
+                    </div>
+
+                    <!-- Intellectual Property -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-copyright"></i>
+                            Intellectual Property
+                        </h2>
+                        <p>The service and its original content are and will remain the exclusive property of SimpleSEOTags. Our service is protected by copyright, trademark, and other laws.</p>
+                        
+                        <div class="highlight-box">
+                            <p>While you retain rights to your content, you grant us permission to analyze it for tag generation purposes.</p>
+                        </div>
+                    </div>
+
+                    <!-- Limitations -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Limitations of Service
+                        </h2>
+                        <p>We strive to provide the best service possible, however:</p>
+                        <ul class="terms-list">
+                            <li>We don't guarantee specific results or rankings</li>
+                            <li>Service availability may vary</li>
+                            <li>Features may change without notice</li>
+                            <li>We reserve the right to refuse service</li>
+                        </ul>
+                    </div>
+
+                    <!-- Termination -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-ban"></i>
+                            Termination
+                        </h2>
+                        <p>We may terminate or suspend your access to our service immediately, without prior notice or liability, for any reason, including:</p>
+                        <ul class="terms-list">
+                            <li>Violation of these Terms</li>
+                            <li>Abuse of the service</li>
+                            <li>Fraudulent activity</li>
+                            <li>At our sole discretion</li>
+                        </ul>
+                    </div>
+
+                    <!-- Changes to Terms -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-file-contract"></i>
+                            Changes to Terms
+                        </h2>
+                        <p>We reserve the right to modify or replace these Terms at any time. We will provide notice of any significant changes.</p>
+                        
+                        <div class="highlight-box">
+                            <p>Continued use of our service after changes constitutes acceptance of the new Terms.</p>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-envelope"></i>
+                            Contact Us
+                        </h2>
+                        <p>If you have any questions about these Terms, please contact us:</p>
+                        <ul class="terms-list">
+                            <li>Email: terms@simpleseotools.com</li>
+                            <li>Address: 123 Terms Street, Legal City, 12345</li>
+                            <li>Phone: +1 (555) 123-4567</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %} 

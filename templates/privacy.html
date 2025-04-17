@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy - SimpleSEOTags{% endblock %}
+
+{% block styles %}
+<style>
+    .privacy-container {
+        padding-top: 80px;
+        background: #fff;
+    }
+
+    /* Hero Section */
+    .privacy-hero {
+        background: linear-gradient(to right, #fff, #f8f9fa);
+        padding: 4rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .privacy-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--black);
+        margin-bottom: 1rem;
+    }
+
+    .last-updated {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Content Section */
+    .privacy-content {
+        padding: 4rem 0;
+    }
+
+    .section-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .section-card:hover {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--black);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .section-title i {
+        color: var(--red);
+    }
+
+    .privacy-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .privacy-list li {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .privacy-list li::before {
+        content: "•";
+        color: var(--red);
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .contact-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .contact-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--black);
+    }
+
+    @media (max-width: 768px) {
+        .privacy-hero {
+            padding: 3rem 0;
+        }
+
+        .privacy-title {
+            font-size: 2rem;
+        }
+
+        .section-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="privacy-container">
+    <!-- Hero Section -->
+    <section class="privacy-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="privacy-title">Privacy Policy</h1>
+                    <p class="last-updated">Last Updated: March 15, 2024</p>
+                    <p class="lead">We value your privacy and are committed to protecting your personal information.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="privacy-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Information Collection -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-database"></i>
+                            Information We Collect
+                        </h2>
+                        <p>We collect the following types of information when you use SimpleSEOTags:</p>
+                        <ul class="privacy-list">
+                            <li>Video titles and descriptions you input for tag generation</li>
+                            <li>Usage data to improve our service</li>
+                            <li>Technical information about your device and browser</li>
+                            <li>Cookies and similar tracking technologies</li>
+                        </ul>
+                    </div>
+
+                    <!-- Information Usage -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-tasks"></i>
+                            How We Use Your Information
+                        </h2>
+                        <p>Your information helps us to:</p>
+                        <ul class="privacy-list">
+                            <li>Generate relevant tags for your videos</li>
+                            <li>Improve our tag generation algorithms</li>
+                            <li>Provide customer support</li>
+                            <li>Maintain and improve our service</li>
+                            <li>Send important updates about our service</li>
+                        </ul>
+                    </div>
+
+                    <!-- Data Protection -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Data Protection
+                        </h2>
+                        <p>We implement robust security measures to protect your data:</p>
+                        <ul class="privacy-list">
+                            <li>Encryption of data in transit and at rest</li>
+                            <li>Regular security audits and updates</li>
+                            <li>Strict access controls and authentication</li>
+                            <li>Compliance with data protection regulations</li>
+                        </ul>
+                    </div>
+
+                    <!-- Cookie Policy -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-cookie"></i>
+                            Cookie Policy
+                        </h2>
+                        <p>We use cookies to enhance your experience:</p>
+                        <ul class="privacy-list">
+                            <li>Essential cookies for site functionality</li>
+                            <li>Analytics cookies to understand usage</li>
+                            <li>Preference cookies to remember your settings</li>
+                        </ul>
+                    </div>
+
+                    <!-- Your Rights -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-user-shield"></i>
+                            Your Rights
+                        </h2>
+                        <p>You have the right to:</p>
+                        <ul class="privacy-list">
+                            <li>Access your personal data</li>
+                            <li>Request data correction or deletion</li>
+                            <li>Opt-out of marketing communications</li>
+                            <li>Request data portability</li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="section-card">
+                        <h2 class="section-title">
+                            <i class="fas fa-envelope"></i>
+                            Contact Us
+                        </h2>
+                        <p>If you have any questions about our privacy policy, please contact us:</p>
+                        <div class="contact-card">
+                            <h3 class="contact-title">Get in Touch</h3>
+                            <p><i class="fas fa-envelope me-2"></i> privacy@simpleseotools.com</p>
+                            <p><i class="fas fa-map-marker-alt me-2"></i> 123 Privacy Street, Security City, 12345</p>
+                            <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %} 

@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+
+{% block title %}Free YouTube Tag Generator - Boost Video Rankings | SimpleSEOTags{% endblock %}
+
+{% block head %}
+    <!-- Override meta tags for landing page -->
+    <meta name="description" content="Generate perfect YouTube tags with our free AI-powered tool. Boost your video rankings, increase visibility, and grow your channel with optimized tags.">
+    <meta name="keywords" content="youtube tag generator, free youtube tags, video seo, youtube optimization, video tags, youtube ranking tool, youtube keywords">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Free YouTube Tag Generator - Boost Video Rankings">
+    <meta property="og:description" content="Generate perfect YouTube tags with our free AI-powered tool. Boost your video rankings and reach more viewers.">
+
+    <!-- Twitter -->
+    <meta property="twitter:title" content="Free YouTube Tag Generator - Boost Video Rankings">
+    <meta property="twitter:description" content="Generate perfect YouTube tags with our free AI-powered tool. Increase your video visibility.">
+
+    <!-- Additional Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SimpleSEOTags YouTube Tag Generator",
+        "applicationCategory": "SEO Tool",
+        "description": "Free AI-powered YouTube tag generator for optimizing video visibility and rankings",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{ request.url_root }}"
+        },
+        "potentialAction": {
+            "@type": "UseAction",
+            "target": "{{ url_for('index', _external=True) }}"
+        }
+    }
+    </script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --dark: #0a0a0a;
+        --dark-lighter: #1a1a1a;
+        --dark-accent: #252525;
+        --red: #FF0000;
+        --red-dark: #cc0000;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        min-height: 100vh;
+        background: var(--dark);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,0,0,0.1) 0%, transparent 100%);
+        pointer-events: none;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 6rem 0;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .highlight {
+        background: linear-gradient(135deg, var(--red) 0%, #ff4d4d 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4rem;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 3rem;
+        line-height: 1.6;
+    }
+
+    .hero-features {
+        margin-bottom: 3rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        color: rgba(255,255,255,0.9);
+        font-size: 1.1rem;
+    }
+
+    .feature-item i {
+        color: var(--red);
+        font-size: 1.4rem;
+    }
+
+    /* Icons Grid */
+    .hero-icons {
+        position: relative;
+    }
+
+    .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+        max-width: 500px;
+        margin: 0 auto;
+        transform: perspective(1000px) rotateY(-15deg);
+        transform-style: preserve-3d;
+    }
+
+    .icon-item {
+        aspect-ratio: 1;
+        background: var(--dark-accent);
+        border: 2px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--red);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        transition: all 0.4s ease;
+        transform: translateZ(20px);
+        position: relative;
+    }
+
+    .icon-item::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1));
+        pointer-events: none;
+    }
+
+    .icon-item:hover {
+        transform: translateZ(40px) scale(1.1);
+        border-color: var(--red);
+        box-shadow: 0 30px 60px rgba(255,0,0,0.2);
+    }
+
+    /* CTA Button */
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 2.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: white;
+        background: var(--red);
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255,0,0,0.3);
+        color: white;
+    }
+
+    .cta-button:hover::before {
+        transform: translateX(100%);
+    }
+
+    .cta-button i {
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 991px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+
+        .icon-grid {
+            transform: none;
+            gap: 1.5rem;
+        }
+
+        .icon-item {
+            font-size: 2.5rem;
+        }
+    }
+
+    /* Blog Section */
+    .blog-section {
+        padding: 6rem 0;
+        background: #fff;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--dark) 0%, var(--dark-lighter) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 3rem;
+    }
+
+    .blog-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blog-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+
+    .blog-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .blog-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blog-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--dark);
+        text-decoration: none;
+    }
+
+    .blog-title:hover {
+        color: var(--red);
+    }
+
+    .blog-excerpt {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+    }
+
+    .blog-meta {
+        font-size: 0.85rem;
+        color: #999;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .blog-author {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .blog-date {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .view-more-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--dark);
+        color: white;
+        border-radius: 100px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .view-more-btn:hover {
+        background: var(--red);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .view-more-btn i {
+        transition: transform 0.3s ease;
+    }
+
+    .view-more-btn:hover i {
+        transform: translateX(4px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="hero-section">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title">Create Perfect <span class="highlight">YouTube Tags</span> in Seconds</h1>
+                    <p class="hero-subtitle">Boost your video visibility with AI-powered tag suggestions optimized for YouTube's algorithm</p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Advanced AI-powered tag generation</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Optimized for better rankings</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>Instant results, no signup required</span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('index') }}" class="cta-button">
+                        <i class="fas fa-magic"></i>
+                        Generate Tags Now
+                    </a>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <div class="hero-icons">
+                        <div class="icon-grid">
+                            <div class="icon-item">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <div class="icon-item">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <div class="icon-item">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="icon-item">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">Latest from Our Blog</h2>
+                    <p class="section-subtitle">Stay updated with YouTube SEO tips and strategies</p>
+                </div>
+            </div>
+            <div class="row" id="blog-posts">
+                <!-- Blog posts will be loaded here -->
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-auto">
+                    <a href="https://blog.simpleseotags.io" target="_blank" class="view-more-btn">
+                        <span>View More Articles</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+// Load blog posts
+function loadBlogPosts() {
+    fetch('/blog-posts')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error loading blog posts:', data.error);
+                return;
+            }
+
+            const blogPostsContainer = document.getElementById('blog-posts');
+            blogPostsContainer.innerHTML = data.posts.map(post => `
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <article class="blog-card">
+                        ${post.image ? `
+                            <img src="${post.image}" alt="${post.title}" class="blog-image">
+                        ` : ''}
+                        <div class="blog-content">
+                            <a href="${post.link}" class="blog-title" target="_blank">
+                                ${post.title}
+                            </a>
+                            <div class="blog-excerpt">
+                                ${post.description.substring(0, 120)}...
+                            </div>
+                            <div class="blog-meta">
+                                <div class="blog-author">
+                                    <i class="fas fa-user"></i>
+                                    ${post.author}
+                                </div>
+                                <div class="blog-date">
+                                    <i class="fas fa-calendar"></i>
+                                    ${new Date(post.date).toLocaleDateString()}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+// Load blog posts when page loads
+document.addEventListener('DOMContentLoaded', loadBlogPosts);
+</script>
+{% endblock %} 

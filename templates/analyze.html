@@ -1,0 +1,630 @@
+{% extends "base.html" %}
+
+{% block title %}YouTube Video Analysis - SimpleSEOTags{% endblock %}
+
+{% block styles %}
+<style>
+    .analysis-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .input-section {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .input-section h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .url-input {
+        height: 60px;
+        padding: 0 1.5rem;
+        font-size: 1.1rem;
+        border: 2px solid #eee;
+        border-radius: 12px;
+        width: 100%;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+    }
+
+    .url-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
+    }
+
+    .analyze-btn {
+        width: 100%;
+        height: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        background: #2d3436;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .analyze-btn:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+    }
+
+    .results-section {
+        display: none;
+    }
+
+    .video-card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+
+    .video-header {
+        position: relative;
+        background: #000;
+    }
+
+    .video-thumbnail {
+        display: none; /* Hide the thumbnail since we're using embed */
+    }
+
+    .video-info {
+        padding: 2rem;
+    }
+
+    .video-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .video-description {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .stat-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 16px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .tags-section {
+        margin-top: 2rem;
+    }
+
+    .tags-section h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .tags-section h3 i {
+        color: var(--primary-color);
+    }
+
+    .tag-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .tag {
+        background: #f8f9fa;
+        padding: 0.75rem 1.25rem;
+        border-radius: 100px;
+        font-size: 0.95rem;
+        color: #2d3436;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid #eee;
+    }
+
+    .tag:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    .tag i {
+        margin-left: 0.5rem;
+        font-size: 0.85rem;
+        opacity: 0.7;
+    }
+
+    #loading {
+        text-align: center;
+        padding: 4rem 2rem;
+        display: none;
+    }
+
+    #loading .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        color: var(--primary-color);
+    }
+
+    #loading p {
+        margin-top: 1.5rem;
+        color: #666;
+        font-size: 1.1rem;
+    }
+
+    .error-message {
+        background: #fee2e2;
+        color: #ef4444;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+        display: none;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .suggestions-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #eee;
+    }
+
+    .suggestions-section h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .suggestions-section h3 i {
+        color: var(--primary-color);
+    }
+
+    .suggestions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .suggestion-card {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    .suggestion-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .suggestion-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .suggestion-header i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+
+    .suggestion-header h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .suggestion-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .suggestion-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        font-size: 0.95rem;
+        color: #666;
+    }
+
+    .suggestion-list li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .suggestion-list li i {
+        color: var(--primary-color);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+        .video-title {
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+        }
+
+        .suggestions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .video-embed {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        overflow: hidden;
+    }
+
+    .video-embed iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analysis-container">
+    <div class="input-section">
+        <h1>YouTube Video Analysis</h1>
+        <p class="lead mb-4">Get detailed insights about any YouTube video</p>
+        <form id="analyze-form" onsubmit="analyzeVideo(event)">
+            <input type="text" 
+                   class="url-input" 
+                   id="video-url" 
+                   placeholder="Paste YouTube video URL here..."
+                   required>
+            <button type="submit" class="analyze-btn">
+                <i class="fas fa-search"></i>
+                Analyze Video
+            </button>
+        </form>
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <div id="loading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Analyzing video data...</p>
+    </div>
+
+    <div class="results-section" id="results">
+        <div class="video-card">
+            <div class="video-header">
+                <div class="video-embed">
+                    <iframe id="video-player" 
+                            width="100%" 
+                            height="100%" 
+                            src="" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            <div class="video-info">
+                <h2 id="video-title" class="video-title"></h2>
+                <p id="video-description" class="video-description"></p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div id="view-count" class="stat-value">0</div>
+                        <div class="stat-label">Views</div>
+                    </div>
+                    <div class="stat-card">
+                        <div id="like-count" class="stat-value">0</div>
+                        <div class="stat-label">Likes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div id="comment-count" class="stat-value">0</div>
+                        <div class="stat-label">Comments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div id="duration" class="stat-value">0:00</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="tags-section">
+                    <h3>
+                        <i class="fas fa-tags"></i>
+                        Video Tags
+                    </h3>
+                    <div id="tag-cloud" class="tag-cloud"></div>
+                </div>
+
+                <div class="suggestions-section">
+                    <h3>
+                        <i class="fas fa-lightbulb"></i>
+                        Optimization Suggestions
+                    </h3>
+                    <div class="suggestions-grid">
+                        <div id="tag-suggestions" class="suggestion-card">
+                            <div class="suggestion-header">
+                                <i class="fas fa-tags"></i>
+                                <h4>Tag Optimization</h4>
+                            </div>
+                            <ul class="suggestion-list" id="tag-suggestions-list"></ul>
+                        </div>
+                        <div id="title-suggestions" class="suggestion-card">
+                            <div class="suggestion-header">
+                                <i class="fas fa-heading"></i>
+                                <h4>Title Optimization</h4>
+                            </div>
+                            <ul class="suggestion-list" id="title-suggestions-list"></ul>
+                        </div>
+                        <div id="description-suggestions" class="suggestion-card">
+                            <div class="suggestion-header">
+                                <i class="fas fa-align-left"></i>
+                                <h4>Description Optimization</h4>
+                            </div>
+                            <ul class="suggestion-list" id="description-suggestions-list"></ul>
+                        </div>
+                        <div id="engagement-suggestions" class="suggestion-card">
+                            <div class="suggestion-header">
+                                <i class="fas fa-chart-line"></i>
+                                <h4>Engagement Tips</h4>
+                            </div>
+                            <ul class="suggestion-list" id="engagement-suggestions-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function generateSuggestions(data) {
+    try {
+        const suggestions = {
+            tags: [],
+            title: [],
+            description: [],
+            engagement: []
+        };
+
+        // Tag suggestions
+        if (!data.tags || data.tags.length === 0) {
+            suggestions.tags.push('Add tags to improve video discoverability');
+        } else {
+            if (data.tags.length < 10) {
+                suggestions.tags.push('Add more tags to improve reach (aim for 15-20 tags)');
+            }
+            if (!data.tags.some(tag => data.title.toLowerCase().includes(tag.toLowerCase()))) {
+                suggestions.tags.push('Include title keywords in your tags');
+            }
+        }
+
+        // Title suggestions
+        const titleLength = data.title.length;
+        if (titleLength < 30) {
+            suggestions.title.push('Make your title more descriptive (aim for 40-60 characters)');
+        }
+        if (!data.title.match(/[0-9]/)) {
+            suggestions.title.push('Consider adding numbers to make title more engaging');
+        }
+
+        // Description suggestions
+        const descLength = data.description.length;
+        if (descLength < 100) {
+            suggestions.description.push('Add a longer description to improve SEO');
+        }
+        if (!data.description.includes('http')) {
+            suggestions.description.push('Add relevant links in description');
+        }
+
+        // Engagement suggestions
+        const likeRatio = (parseInt(data.likeCount) / parseInt(data.viewCount)) * 100;
+        const commentRatio = (parseInt(data.commentCount) / parseInt(data.viewCount)) * 100;
+
+        if (likeRatio < 4) {
+            suggestions.engagement.push('Encourage viewers to like the video');
+        }
+        if (commentRatio < 0.5) {
+            suggestions.engagement.push('Ask questions to increase comment engagement');
+        }
+
+        // Update UI with suggestions
+        const suggestionTypes = ['tag', 'title', 'description', 'engagement'];
+        suggestionTypes.forEach(type => {
+            const listElement = document.getElementById(`${type}-suggestions-list`);
+            if (!listElement) {
+                console.error(`Element #${type}-suggestions-list not found`);
+                return;
+            }
+
+            const suggestionsList = suggestions[type + 's'] || [];
+            listElement.innerHTML = suggestionsList.length > 0 
+                ? suggestionsList
+                    .map(suggestion => `
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>${suggestion}</span>
+                        </li>
+                    `).join('')
+                : '<li><i class="fas fa-check-circle"></i><span>Great job! No improvements needed.</span></li>';
+        });
+
+    } catch (error) {
+        console.error('Error generating suggestions:', error);
+    }
+}
+
+function getEmbedUrl(videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+}
+
+function analyzeVideo(event) {
+    event.preventDefault();
+    
+    // Get DOM elements
+    const elements = {
+        videoUrl: document.getElementById('video-url'),
+        loading: document.getElementById('loading'),
+        results: document.getElementById('results'),
+        errorMessage: document.getElementById('error-message'),
+        videoPlayer: document.getElementById('video-player'),
+        title: document.getElementById('video-title'),
+        description: document.getElementById('video-description'),
+        viewCount: document.getElementById('view-count'),
+        likeCount: document.getElementById('like-count'),
+        commentCount: document.getElementById('comment-count'),
+        duration: document.getElementById('duration'),
+        tagCloud: document.getElementById('tag-cloud')
+    };
+
+    // Verify all elements exist
+    for (const [key, element] of Object.entries(elements)) {
+        if (!element) {
+            console.error(`Required element not found: ${key}`);
+            return;
+        }
+    }
+
+    const videoUrl = elements.videoUrl.value;
+    
+    if (!videoUrl) {
+        elements.errorMessage.textContent = 'Please enter a YouTube URL';
+        elements.errorMessage.style.display = 'block';
+        return;
+    }
+    
+    // Reset UI
+    elements.loading.style.display = 'block';
+    elements.results.style.display = 'none';
+    elements.errorMessage.style.display = 'none';
+    elements.videoPlayer.src = ''; // Clear previous video
+    
+    fetch('/analyze', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `video_url=${encodeURIComponent(videoUrl)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        elements.loading.style.display = 'none';
+        
+        if (data.error) {
+            elements.errorMessage.textContent = data.error;
+            elements.errorMessage.style.display = 'block';
+            return;
+        }
+        
+        try {
+            // Extract video ID from the URL
+            const videoId = videoUrl.match(/(?:v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+            if (!videoId) {
+                throw new Error('Could not extract video ID');
+            }
+
+            // Set video embed URL
+            elements.videoPlayer.src = getEmbedUrl(videoId);
+            
+            // Update other UI elements
+            elements.title.textContent = data.title || 'No title available';
+            elements.description.textContent = 
+                data.description ? (
+                    data.description.length > 200 ? 
+                    data.description.substring(0, 200) + '...' : 
+                    data.description
+                ) : 'No description available';
+            
+            elements.viewCount.textContent = parseInt(data.viewCount || 0).toLocaleString();
+            elements.likeCount.textContent = parseInt(data.likeCount || 0).toLocaleString();
+            elements.commentCount.textContent = parseInt(data.commentCount || 0).toLocaleString();
+            elements.duration.textContent = data.duration || '0:00';
+            
+            elements.tagCloud.innerHTML = (data.tags || [])
+                .map(tag => `<div class="tag">${tag}</div>`)
+                .join('') || '<div class="no-tags">No tags found</div>';
+            
+            generateSuggestions(data);
+            elements.results.style.display = 'block';
+        } catch (err) {
+            console.error("Error updating UI:", err);
+            elements.errorMessage.textContent = 'Error displaying results. Please try again.';
+            elements.errorMessage.style.display = 'block';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        elements.loading.style.display = 'none';
+        elements.errorMessage.textContent = 'An error occurred. Please try again.';
+        elements.errorMessage.style.display = 'block';
+    });
+}
+</script>
+{% endblock %} 
